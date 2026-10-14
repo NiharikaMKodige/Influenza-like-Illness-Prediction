@@ -1,0 +1,4 @@
+model_name,rmse,mae,mape,future_pred_7_days,future_pred_14_days
+LSTM,0.22,0.1256,8.6373,5.2742,5.0245
+ARIMA,0.6473,0.508,50.4614,0.9023,0.6934
+XGBoost,0.1534,0.1059,7.4319,4.6401,4.5057

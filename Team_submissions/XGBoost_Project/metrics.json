@@ -1,0 +1,8 @@
+{
+  "model_name": "XGBoost",
+  "rmse": 0.1534,
+  "mae": 0.1059,
+  "mape": 7.4319,
+  "future_pred_7_days": 4.6401,
+  "future_pred_14_days": 4.5057
+}

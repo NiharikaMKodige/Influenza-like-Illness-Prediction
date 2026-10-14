@@ -1,0 +1,8 @@
+{
+    "model_name": "LSTM",
+    "rmse": 0.22,
+    "mae": 0.1256,
+    "mape": 8.6373,
+    "future_pred_7_days": 5.2742,
+    "future_pred_14_days": 5.0245
+}

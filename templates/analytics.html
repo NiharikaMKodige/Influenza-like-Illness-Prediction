@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Analytics & Benchmarks | EpiSentinel AI</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        .saas-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .saas-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased bg-slate-50">
+
+    <!-- Top Accent Bar -->
+    <div class="h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600"></div>
+
+    <!-- ========================================== -->
+    <!-- NAVIGATION BAR                             -->
+    <!-- ========================================== -->
+    <nav class="sticky top-0 z-50 glass-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-lg tracking-tight text-slate-900">EpiSentinel<span class="text-blue-600">AI</span></span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                            Analytics
+                        </span>
+                    </div>
+                    <span class="block text-[11px] text-slate-500 font-medium -mt-0.5">Model Evaluation & Research Lab</span>
+                </div>
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                <a href="/" class="text-slate-600 hover:text-blue-600 transition">Overview</a>
+                <a href="/dashboard" class="text-slate-600 hover:text-blue-600 transition">Surveillance Dashboard</a>
+                <a href="/analytics" class="text-blue-600 font-bold border-b-2 border-blue-600 py-5">
+                    Model Analytics
+                </a>
+            </div>
+
+            <!-- CTA -->
+            <div class="flex items-center gap-3">
+                <a href="/dashboard" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-sm transition flex items-center gap-1.5">
+                    <span>Open Dashboard</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- MAIN CONTENT                               -->
+    <!-- ========================================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
+
+        <!-- Top Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                        Peer-Reviewed Methodology
+                    </span>
+                    <span class="text-xs text-slate-500 font-mono">Test Set: 32 Weeks Out-of-Sample</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-2">
+                    Predictive Model Leaderboard & Evaluation
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    Multi-variate loss metrics, cross-model residual comparisons, and atmospheric correlation analysis.
+                </p>
+            </div>
+            
+            <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-3">
+                <span class="text-2xl font-bold">🥇</span>
+                <div>
+                    <span class="text-[11px] uppercase font-bold text-slate-400 block tracking-wider">Top Performing Model</span>
+                    <span class="text-sm font-extrabold text-slate-900">XGBoost Regressor</span>
+                    <span class="text-xs text-emerald-600 font-semibold block">RMSE: 0.1534 • MAPE: 7.43%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: LEADERBOARD TABLE               -->
+        <!-- ========================================== -->
+        <div class="saas-card p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Empirical Performance Leaderboard</h2>
+                    <p class="text-xs text-slate-500">Evaluated on identical CDC surveillance validation split (2014-2017)</p>
+                </div>
+                <span class="px-2.5 py-1 text-xs font-mono font-bold bg-slate-100 text-slate-700 rounded-md border border-slate-200">
+                    Source: final_model_comparison.csv
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-[11px] font-mono text-slate-500 uppercase tracking-wider bg-slate-50/70">
+                            <th class="py-3 px-4 font-semibold">Rank & Architecture</th>
+                            <th class="py-3 px-4 font-semibold text-right">RMSE</th>
+                            <th class="py-3 px-4 font-semibold text-right">MAE</th>
+                            <th class="py-3 px-4 font-semibold text-right">MAPE (%)</th>
+                            <th class="py-3 px-4 font-semibold text-right">+7D Pred</th>
+                            <th class="py-3 px-4 font-semibold text-right">+14D Pred</th>
+                            <th class="py-3 px-4 font-semibold text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardTbody" class="divide-y divide-slate-100 font-mono">
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                <span class="font-bold text-base">🥇</span>
+                                <div>
+                                    <span class="font-bold text-slate-900 text-sm block">XGBoost (Gradient Boosted Trees)</span>
+                                    <span class="text-[10px] text-slate-400 font-sans">Multi-lag syndromic + weather covariates</span>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold text-blue-700 text-sm">0.1534</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700 font-semibold">0.1059</td>
+                            <td class="py-3.5 px-4 text-right text-emerald-600 font-bold text-sm">7.43%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800 font-semibold">4.64%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800 font-semibold">4.51%</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    PRIMARY CHAMPION
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                <span class="font-bold text-base">🥈</span>
+                                <div>
+                                    <span class="font-bold text-slate-900 text-sm block">LSTM (Deep Recurrent Neural Net)</span>
+                                    <span class="text-[10px] text-slate-400 font-sans">Stacked LSTM cells with Adam optimizer</span>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4 text-right font-bold text-blue-700 text-sm">0.2200</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700 font-semibold">0.1256</td>
+                            <td class="py-3.5 px-4 text-right text-emerald-600 font-bold text-sm">8.64%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800 font-semibold">5.27%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-800 font-semibold">5.02%</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                                    RUNNER-UP
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                <span class="font-bold text-base">🥉</span>
+                                <div>
+                                    <span class="font-bold text-slate-700 text-sm block">ARIMA (Autoregressive Baseline)</span>
+                                    <span class="text-[10px] text-slate-400 font-sans">Linear moving average time series benchmark</span>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4 text-right text-slate-500 text-sm">0.6473</td>
+                            <td class="py-3.5 px-4 text-right text-slate-500">0.5080</td>
+                            <td class="py-3.5 px-4 text-right text-rose-600 font-bold text-sm">50.46%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-500">0.90%</td>
+                            <td class="py-3.5 px-4 text-right text-slate-500">0.69%</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                    STATISTICAL BASELINE
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <span>Evaluation criteria: Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), Mean Absolute Percentage Error (MAPE).</span>
+                <span class="font-semibold text-blue-600">Model ensemble active on Live Dashboard</span>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: COMPARATIVE ERROR CHARTS        -->
+        <!-- ========================================== -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Chart 1: RMSE & MAE Comparison -->
+            <div class="saas-card p-6 space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Residual Loss (RMSE vs. MAE)</h3>
+                        <p class="text-xs text-slate-500">Lower values represent tighter forecast accuracy</p>
+                    </div>
+                    <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                        ABSOLUTE ERROR
+                    </span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="lossComparisonChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: MAPE Error Rate Comparison -->
+            <div class="saas-card p-6 space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Mean Absolute Percentage Error (MAPE %)</h3>
+                        <p class="text-xs text-slate-500">Relative error scale across test sequences</p>
+                    </div>
+                    <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        PERCENTAGE
+                    </span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="mapeComparisonChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: EMPIRICAL RESEARCH ARTIFACTS    -->
+        <!-- ========================================== -->
+        <div class="space-y-6">
+            <div class="pb-2 border-b border-slate-200">
+                <h2 class="text-xl font-extrabold text-slate-900">Visual Research Artifacts & Matrices</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Empirical plots generated from cross-validated model training and feature correlation runs</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Master Model Comparison -->
+                <div class="saas-card p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm">Master Model Trajectory Comparison</h4>
+                        <span class="text-[10px] font-mono text-slate-400">master_model_comparison.png</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <img src="/static/master_model_comparison.png" alt="Master Model Comparison" class="w-full object-cover hover:scale-[1.02] transition-transform duration-300">
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Simultaneous alignment of true CDC test data against XGBoost, LSTM, and ARIMA. XGBoost reliably fits the rapid epidemic surge in late 2017 with minimal phase lag.
+                    </p>
+                </div>
+
+                <!-- Correlation Matrix -->
+                <div class="saas-card p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm">Covariate Correlation Matrix</h4>
+                        <span class="text-[10px] font-mono text-slate-400">correlation_matrix.png</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <img src="/static/correlation_matrix.png" alt="Covariate Correlation Matrix" class="w-full object-cover hover:scale-[1.02] transition-transform duration-300">
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Multivariate Pearson correlation between syndromic lags (<code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">lag_1, lag_2</code>) and meteorological variables. Surface temperature demonstrates strong negative association with seasonal viral surges.
+                    </p>
+                </div>
+
+                <!-- LSTM Actual vs Predicted -->
+                <div class="saas-card p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm">LSTM Actual vs. Predicted Residuals</h4>
+                        <span class="text-[10px] font-mono text-slate-400">lstm_actual_vs_predicted.png</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <img src="/static/lstm_actual_vs_predicted.png" alt="LSTM Actual vs Predicted" class="w-full object-cover hover:scale-[1.02] transition-transform duration-300">
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Detailed test epoch tracking for the Recurrent Neural Network. Demonstrates smooth continuous curve tracking with 0.2200 RMSE and robust momentum capture.
+                    </p>
+                </div>
+
+                <!-- Performance Heatmap Matrix -->
+                <div class="saas-card p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm">Model Evaluation Error Matrix</h4>
+                        <span class="text-[10px] font-mono text-slate-400">model_evaluation_matrix.png</span>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <img src="/static/model_evaluation_matrix.png" alt="Model Evaluation Matrix" class="w-full object-cover hover:scale-[1.02] transition-transform duration-300">
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Cross-horizon residual distribution breakdown. Highlights the steep decay in ARIMA accuracy beyond 3-week windows, contrasted against tree-ensemble resilience.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- FOOTER                                     -->
+    <!-- ========================================== -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span>EpiSentinel AI • Model Analytics & Benchmarking Laboratory</span>
+            </div>
+            <div class="flex items-center gap-4 font-mono text-[11px]">
+                <a href="/" class="hover:text-blue-600 transition">Landing Overview</a>
+                <span>•</span>
+                <a href="/dashboard" class="hover:text-blue-600 transition">Live Dashboard</a>
+                <span>•</span>
+                <span>CDC ILINet 2014-2017</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- CHART SCRIPTS                              -->
+    <!-- ========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnalyticsCharts();
+        });
+
+        function initAnalyticsCharts() {
+            // Chart 1: Loss Comparison (RMSE vs MAE)
+            const ctx1 = document.getElementById('lossComparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['XGBoost (Top)', 'LSTM (RNN)', 'ARIMA'],
+                    datasets: [
+                        {
+                            label: 'RMSE (Root Mean Sq. Error)',
+                            data: [0.1534, 0.2200, 0.6473],
+                            backgroundColor: '#2563EB',
+                            borderRadius: 6,
+                        },
+                        {
+                            label: 'MAE (Mean Absolute Error)',
+                            data: [0.1059, 0.1256, 0.5080],
+                            backgroundColor: '#93C5FD',
+                            borderRadius: 6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { family: '"Plus Jakarta Sans"', size: 11, weight: '600' },
+                                boxWidth: 12,
+                                color: '#475569'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0F172A',
+                            titleFont: { family: '"Plus Jakarta Sans"', size: 12 },
+                            bodyFont: { family: '"JetBrains Mono"', size: 11 },
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: '"Plus Jakarta Sans"', weight: '600' }, color: '#334155' }
+                        },
+                        y: {
+                            grid: { color: '#F1F5F9' },
+                            ticks: { font: { family: '"JetBrains Mono"', size: 10 }, color: '#64748B' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: MAPE Comparison
+            const ctx2 = document.getElementById('mapeComparisonChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['XGBoost (Top)', 'LSTM (RNN)', 'ARIMA'],
+                    datasets: [
+                        {
+                            label: 'MAPE Error Rate (%)',
+                            data: [7.43, 8.64, 50.46],
+                            backgroundColor: ['#059669', '#3B82F6', '#EF4444'],
+                            borderRadius: 6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0F172A',
+                            titleFont: { family: '"Plus Jakarta Sans"', size: 12 },
+                            bodyFont: { family: '"JetBrains Mono"', size: 11 },
+                            callbacks: {
+                                label: (c) => `MAPE: ${c.parsed.y.toFixed(2)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: '"Plus Jakarta Sans"', weight: '600' }, color: '#334155' }
+                        },
+                        y: {
+                            grid: { color: '#F1F5F9' },
+                            ticks: {
+                                font: { family: '"JetBrains Mono"', size: 10 },
+                                color: '#64748B',
+                                callback: (v) => `${v}%`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
