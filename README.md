@@ -43,7 +43,7 @@ The platform follows a decoupled, asynchronous 3-tier enterprise architecture:
 │  - Classical Autoregressive Integrated Moving Average (ARIMA Baseline)  │
 │  - 4-Tier Epidemiological Risk Classification Engine                    │
 └─────────────────────────────────────────────────────────────────────────┘
-```bash
+```
 ---
 
 ## ✨ Key Features
