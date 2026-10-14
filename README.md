@@ -20,7 +20,7 @@ Traditional public health reporting is retrospective—documenting infection rat
 ## 🏛️ System Architecture
 
 The platform follows a decoupled, asynchronous 3-tier enterprise architecture:
-
+```bash
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                           PRESENTATION LAYER                            │
 │  Pristine Light Theme SaaS (HTML5 + Tailwind CSS + Chart.js Engine)     │
@@ -43,7 +43,7 @@ The platform follows a decoupled, asynchronous 3-tier enterprise architecture:
 │  - Classical Autoregressive Integrated Moving Average (ARIMA Baseline)  │
 │  - 4-Tier Epidemiological Risk Classification Engine                    │
 └─────────────────────────────────────────────────────────────────────────┘
-
+```bash
 ---
 
 ## ✨ Key Features
@@ -81,7 +81,7 @@ The platform follows a decoupled, asynchronous 3-tier enterprise architecture:
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/EpiSentinel-AI.git](https://github.com/your-username/EpiSentinel-AI.git)
+git clone [https://github.com/NiharikaMKodige/Influenza-like-Illness-Prediction.git](https://github.com/NiharikaMKodige/Influenza-like-Illness-Prediction.git)
 cd EpiSentinel-AI
 ``` 
 
